@@ -1,0 +1,120 @@
+@{
+    ViewData["Title"] = "About Us";
+    Layout = "_AdminLayout"; 
+}
+
+<div class="container-fluid px-4 mt-4 animate__animated animate__fadeIn">
+    
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="p-5 text-center shadow-sm text-white border-0" 
+                 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 25px;">
+                <h1 class="display-4 fw-bold mb-3">Innovation in Every Click</h1>
+                <p class="lead opacity-75 mx-auto" style="max-width: 800px; font-family: 'Poppins', sans-serif;">
+                    Welcome to the next generation of E-commerce management. We build tools that empower businesses to grow, scale, and succeed in the digital age.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center" style="border-radius: 20px;">
+                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center" 
+                     style="width: 70px; height: 70px; background: #eeebff; color: #764ba2; border-radius: 50%;">
+                    <i class="fas fa-rocket fa-2x"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Our Mission</h4>
+                <p class="text-muted small px-2">
+                    To simplify online trading by providing a robust, secure, and lightning-fast platform built with the latest technologies.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center" style="border-radius: 20px;">
+                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center" 
+                     style="width: 70px; height: 70px; background: #e0f2fe; color: #0284c7; border-radius: 50%;">
+                    <i class="fas fa-shield-alt fa-2x"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Our Vision</h4>
+                <p class="text-muted small px-2">
+                    Setting the standard for digital marketplaces through clean code, modern UI, and user-centric experiences.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 text-center" style="border-radius: 20px;">
+                <div class="mx-auto mb-3 d-flex align-items-center justify-content-center" 
+                     style="width: 70px; height: 70px; background: #dcfce7; color: #16a34a; border-radius: 50%;">
+                    <i class="fas fa-heart fa-2x"></i>
+                </div>
+                <h4 class="fw-bold text-dark">Our Values</h4>
+                <p class="text-muted small px-2">
+                    Transparency, security, and continuous improvement are the core principles that drive every update we ship.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-5" style="border-radius: 20px; background: #fff;">
+        <div class="card-body py-5">
+            <div class="row text-center g-4">
+                <div class="col-md-3">
+                    <h2 class="fw-bold mb-0" style="color: #764ba2;">500+</h2>
+                    <p class="text-muted small fw-bold text-uppercase mb-0">Products Managed</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="fw-bold mb-0" style="color: #764ba2;">1.2K</h2>
+                    <p class="text-muted small fw-bold text-uppercase mb-0">Daily Orders</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="fw-bold mb-0" style="color: #764ba2;">99.9%</h2>
+                    <p class="text-muted small fw-bold text-uppercase mb-0">Server Uptime</p>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="fw-bold mb-0" style="color: #764ba2;">24/7</h2>
+                    <p class="text-muted small fw-bold text-uppercase mb-0">Expert Support</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row align-items-center py-4">
+        <div class="col-lg-6">
+            <h2 class="fw-bold mb-3" style="color: #2c3e50;">Built with Modern Tech Stack</h2>
+            <p class="text-muted mb-4">
+                Our platform leverages the power of <strong>ASP.NET Core 8</strong>, <strong>Entity Framework</strong>, and <strong>SQL Server</strong> to ensure high performance, scalability, and military-grade security for your business data.
+            </p>
+            <div class="d-flex gap-3">
+                <span class="badge bg-light text-dark border px-3 py-2" style="border-radius: 8px;"><i class="fab fa-microsoft me-1"></i> .NET 8</span>
+                <span class="badge bg-light text-dark border px-3 py-2" style="border-radius: 8px;"><i class="fas fa-database me-1"></i> SQL Server</span>
+                <span class="badge bg-light text-dark border px-3 py-2" style="border-radius: 10px;"><i class="fas fa-code me-1"></i> C# Clean Arch</span>
+            </div>
+        </div>
+        <div class="col-lg-6 text-center mt-4 mt-lg-0">
+            <div class="p-5 bg-white shadow-sm d-inline-block" style="border-radius: 30px; border: 1px dashed #764ba2;">
+                <i class="fas fa-laptop-code fa-5x" style="color: #764ba2; opacity: 0.8;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* إضافة أنيميشن بسيطة لظهور الصفحة */
+    .animate__fadeIn {
+        animation: fadeIn 0.8s ease-in;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+</style>

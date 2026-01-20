@@ -1,0 +1,53 @@
+@model Promotion
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card border-0 shadow-lg rounded-4">
+                <div class="card-body p-5">
+                    <h3 class="fw-bold mb-4 text-center">Create Promotion</h3>
+                    <form asp-action="Create">
+                        <div class="mb-3">
+                            <label asp-for="Code" class="form-label fw-semibold"></label>
+                            <input asp-for="Code" class="form-control form-control-lg border-2" placeholder="SUMMER2026" />
+                            <span asp-validation-for="Code" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label asp-for="Discount" class="form-label fw-semibold">Discount %</label>
+                                <input asp-for="Discount" type="number" class="form-control border-2" />
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="MaxUsage" class="form-label fw-semibold">Max Usage</label>
+                                <input asp-for="MaxUsage" class="form-control border-2" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Target Product</label>
+                            <select asp-for="ProductId" asp-items="ViewBag.ProductList" class="form-select border-2">
+                                <option disabled selected>-- Select Product --</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ValidTo" class="form-label fw-semibold">Valid Until</label>
+                            <input asp-for="ValidTo" type="date" class="form-control border-2" />
+                        </div>
+
+                        <div class="form-check form-switch mb-4">
+                            <input class="form-check-input" type="checkbox" asp-for="IsValid" checked>
+                            <label class="form-check-label fw-bold" asp-for="IsValid">Activate Immediately</label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold">Save Promotion</button>
+                            <a asp-action="Index" class="btn btn-link text-muted">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
