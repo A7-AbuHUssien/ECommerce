@@ -1,8 +1,96 @@
-@model TModel
+@model Category
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Category Details";
+    Layout = "_AdminLayout";  
 }
 
-<h2>title</h2>
+<div class="container-fluid px-4 mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/Admin/" class="text-decoration-none" style="color: #764ba2;">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none" style="color: #764ba2;">Categories</a></li>
+            <li class="breadcrumb-item active">Category Details</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                <div class="card-header py-4 border-0 text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="mb-2">
+                        <i class="fas fa-layer-group text-white opacity-75" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h4 class="mb-0 text-white fw-bold">Category Information</h4>
+                </div>
+
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <div class="text-center mb-5">
+                        <h2 class="fw-bold mb-1" style="color: #2c3e50;">@Model.Name</h2>
+                        <span class="text-muted small fw-bold text-uppercase tracking-wider">Reference ID: #@Model.Id</span>
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-12">
+                            <div class="p-3 rounded-4 d-flex align-items-center justify-content-between" style="background: #f8fafc; border: 1px solid #f1f5f9;">
+                                <span class="fw-bold text-secondary small text-uppercase">Availability Status</span>
+                                @if (Model.Status)
+                                {
+                                    <span class="badge px-3 py-2 fw-bold" style="background: #dcfce7; color: #16a34a; border-radius: 8px;">
+                                        <i class="fas fa-check-circle me-1"></i> Active
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge px-3 py-2 fw-bold" style="background: #fee2e2; color: #ef4444; border-radius: 8px;">
+                                        <i class="fas fa-times-circle me-1"></i> Inactive
+                                    </span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="fw-bold text-secondary small text-uppercase mb-2 d-block">Detailed Description</label>
+                            <div class="p-4 rounded-4" style="background: #ffffff; border: 1px solid #f1f5f9; min-height: 120px;">
+                                <p class="mb-0 lh-lg" style="color: #475569; font-size: 0.95rem;">
+                                    @if (string.IsNullOrWhiteSpace(Model.Description))
+                                    {
+                                        <span class="fst-italic text-muted opacity-50">No description has been provided for this category. You can add one by editing the details.</span>
+                                    }
+                                    else
+                                    {
+                                        @Model.Description
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-5 opacity-25">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a asp-action="Index" class="btn btn-light px-4 fw-bold text-muted border-0" style="border-radius: 12px; background: #f1f5f9;">
+                            <i class="fas fa-arrow-left me-1"></i> Back to List
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn text-white px-5 fw-bold shadow-sm" 
+                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px;">
+                            <i class="fas fa-edit me-1"></i> Edit Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center opacity-75">
+                <small class="text-muted">
+                    <i class="fas fa-shield-alt me-1 text-purple"></i> 
+                    Protected Data Management Layer
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .text-purple { color: #764ba2; }
+    .tracking-wider { letter-spacing: 0.05em; }
+</style>

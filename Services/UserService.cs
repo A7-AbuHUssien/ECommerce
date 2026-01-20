@@ -1,5 +1,3 @@
-using ECommerce.Repositories;
-using ECommerce.Repositories.Interfaces;
 using ECommerce.Services.Interfaces;
 using ECommerce.Utilities;
 using ECommerce.ViewModels;
@@ -61,7 +59,6 @@ public class UserService : IUserService
     }
     public async Task<List<string>> GetAvailableRolesAsync()
     {
-        // These match your StaticData constants
         return new List<string> 
         { 
             StaticData.SUPER_ADMIN_ROLE, 
@@ -84,22 +81,14 @@ public class UserService : IUserService
         if (user == null) 
             return IdentityResult.Failed(new IdentityError { Description = "User not found." });
         
-        // If user is currently locked out or has a lockout end date in the future
         if (user.LockoutEnd != null && user.LockoutEnd > DateTime.UtcNow)
-        {
-            // Unblock: Set lockout end to now
             user.LockoutEnd = DateTime.UtcNow;
-        }
         else
-        {
-            // Block: Set lockout end to 100 years in the future
             user.LockoutEnd = DateTime.UtcNow.AddYears(100);
-        }
-
+        
         if (_userManager.IsInRoleAsync(user, StaticData.SUPER_ADMIN_ROLE).Result)
-        {
             return IdentityResult.Failed();
-        }
+        
         return await _userManager.UpdateAsync(user);
     }
 }

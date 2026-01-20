@@ -1,8 +1,127 @@
-@model TModel
+@model ECommerce.ViewModels.ApplicationUserVM
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "User Profile";
+}
+<div class="container mt-3">
+    @if (TempData["success-notification"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["success-notification"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["error-notification"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> @TempData["error-notification"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
 
-<h2>title</h2>
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar"
+                             class="rounded-circle img-fluid shadow" style="width: 120px;">
+                    </div>
+                    <h4 class="mb-1">@Model.Name</h4>
+                    <p class="text-muted mb-4">@Model.Email</p>
+                    <div class="d-flex justify-content-center mb-2">
+                        <span class="badge bg-primary-soft text-primary px-3 py-2">Active Account</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-primary mb-3"><i class="bi bi-info-circle me-2"></i>About Account</h6>
+                    <p class="small text-muted">
+                        Welcome to your account settings. You can update your personal information and address or change your password to ensure your account security.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 text-primary">Personal Details & Address</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateProfile" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label">Full Name</label>
+                                <input asp-for="Name" class="form-control" placeholder="Enter your name">
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address</label>
+                                <input asp-for="Email" class="form-control bg-light" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                                <input asp-for="PhoneNumber" class="form-control" placeholder="05xxxxxxxx">
+                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Address" class="form-label">Address</label>
+                                <input asp-for="Address" class="form-control" placeholder="City, Street, Building">
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12 text-end mt-4">
+                                <button type="reset" class="btn btn-light border px-4">Cancel</button>
+                                <button type="submit" class="btn btn-primary px-4 shadow-sm">Update Profile</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="mb-0 text-danger">Security & Password</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdatePassword" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="CurrentPassword" class="form-label">Current Password</label>
+                                <input asp-for="CurrentPassword" type="password" class="form-control" placeholder="••••••••">
+                                <span asp-validation-for="CurrentPassword" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="NewPassword" class="form-label">New Password</label>
+                                <input asp-for="NewPassword" type="password" class="form-control" placeholder="••••••••">
+                                <span asp-validation-for="NewPassword" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12 text-end mt-4">
+                                <button type="submit" class="btn btn-danger px-4 shadow-sm">Update Password</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    body { background-color: #f8f9fa; }
+    .card { border-radius: 12px; }
+    .btn { border-radius: 8px; font-weight: 500; transition: all 0.3s; }
+    .form-control { border-radius: 8px; padding: 10px 15px; border: 1px solid #dee2e6; }
+    .form-control:focus { border-color: #0d6efd; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1); }
+    .bg-primary-soft { background-color: rgba(13, 110, 253, 0.1); }
+</style>

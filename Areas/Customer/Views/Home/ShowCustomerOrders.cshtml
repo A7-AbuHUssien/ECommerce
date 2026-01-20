@@ -1,8 +1,59 @@
-@model TModel
+@model IEnumerable<Order>
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewBag.Title = "CustomerOrders";
+    Layout = "_CustomerLayout";
 }
 
-<h2>title</h2>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">Order History</h2>
+        <span class="badge bg-dark text-white">Total Orders: @Model.Count()</span>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5 border rounded bg-light">
+            <h4 class="text-muted">You haven't placed any orders yet.</h4>
+            <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="btn btn-primary mt-3">Start Shopping</a>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-sm border-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Order ID</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.OrderByDescending(o => o.OrderDate))
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold">#@order.Id</td>
+                                <td>@order.OrderDate.ToString("MMM dd, yyyy")</td>
+                                <td class="text-success fw-bold">@order.Total.ToString("N2") EGP</td>
+                                <td>
+                                    <span class="badge rounded-pill bg-success px-3">
+                                        @order.OrderStatus
+                                    </span>
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="ShowCustomerOrderDetails" asp-route-orderGuid="@order.OrderGuid" class="btn btn-sm btn-outline-primary rounded-pill">
+                                        View Details
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

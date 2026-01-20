@@ -1,11 +1,19 @@
+using ECommerce.Utilities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ECommerce518.Areas.Admin.Controllers;
-
-public class Home : Controller
+namespace ECommerce.Areas.Admin.Controllers;
+[Area("Admin")]
+[Authorize(Roles = $"{StaticData.SUPER_ADMIN_ROLE},{StaticData.ADMIN_ROLE},{StaticData.EMPLOYEE_ROLE}")]
+public class HomeController : Controller
 {
     // GET
     public IActionResult Index()
+    {
+        return View();
+    }
+
+    public IActionResult NotFoundPage()
     {
         return View();
     }

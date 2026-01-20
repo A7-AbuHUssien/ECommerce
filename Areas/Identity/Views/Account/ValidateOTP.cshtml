@@ -1,8 +1,216 @@
-@model TModel
+@model ECommerce.ViewModels.ValidateOtpVM
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Validate OTP";
+    Layout = null;
 }
 
-<h2>title</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <style>
+        /* --- جميع أنماط الـ CSS التي كتبتها سابقاً تظل كما هي --- */
+        /* ... (انسخ نفس كود الـ <style> بالكامل من ملفك السابق) ... */
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        .split-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* --- الجزء الأيسر (العلامة التجارية) --- */
+        .left-pane {
+            flex-basis: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-align: center;
+        }
+
+        .left-pane h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .left-pane p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            max-width: 400px;
+        }
+
+        /* --- الجزء الأيمن (النموذج) --- */
+        .right-pane {
+            flex-basis: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 450px; /* تحديد عرض النموذج */
+            padding: 40px;
+        }
+
+        .form-container h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group .icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 15px 15px 50px; /* مساحة للأيقونة */
+            background: #f4f7f6; /* خلفية رمادية فاتحة */
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            color: #333;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: #999;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
+        }
+
+        .text-danger {
+            font-size: 0.875em;
+            display: block;
+            margin-top: 5px;
+            color: #e74c3c; /* لون أحمر للخطر */
+        }
+
+        .validation-summary-errors {
+            margin-bottom: 15px;
+        }
+
+        .validation-summary-errors ul {
+            padding-left: 20px;
+            color: #e74c3c;
+        }
+
+        /* تصميم زر تسجيل الدخول */
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff; /* لون الخط أبيض */
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* رابط إنشاء حساب جديد */
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .register-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* إخفاء الـ label الافتراضي */
+        label {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="split-container">
+
+    <div class="left-pane">
+        <h1>Check Your Email</h1>
+        <p>We've sent a 4-digit code to your email address. Enter it below to verify your identity.</p>
+    </div>
+
+    <div class="right-pane">
+        <div class="form-container">
+            <h2>Validate OTP</h2>
+
+            <form asp-controller="Account" asp-action="ValidateOTP" method="post">
+                <input type="hidden" name="userId" value="@Model.UserId"/>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="input-group">
+                    <span class="icon"><i class="fa-solid fa-key"></i></span>
+                    <input asp-for="OtpCode" class="form-control" placeholder="Enter 4-digit code"/>
+                    <span asp-validation-for="OtpCode" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn-login">Verify Code</button>
+            </form>
+
+            <div class="register-link">
+                <p>Didn't receive a code? 
+                   <a asp-controller="Account" asp-action="ForgotPassword" asp-route-email="@Model.UserId">Resend Code</a>
+                </p>
+            </div>
+             <div class="register-link">
+                <p>Back to Login <a asp-controller="Account" asp-action="Login">Sign In</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<partial name="_ValidationScriptsPartial"/>
+</body>
+</html>

@@ -1,18 +1,82 @@
-@model TModel
+@model Brand
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Create Brand";
+    Layout = "_AdminLayout";  
 }
 
-<!DOCTYPE html>
+<div class="container-fluid px-4 mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/Admin/" class="text-decoration-none" style="color: #764ba2;">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none" style="color: #764ba2;">Brands</a></li>
+            <li class="breadcrumb-item active">Create Brand</li>
+        </ol>
+    </nav>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0" style="border-radius: 15px; overflow: hidden;">
+                <div class="card-header py-3 border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h5 class="mb-0 text-white fw-bold">
+                        <i class="fas fa-plus-circle me-2"></i>Create New Brand
+                    </h5>
+                </div>
+                
+                <div class="card-body p-4 bg-white">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Name" class="form-label fw-bold" style="color: #2c3e50;">Brand Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-tag text-muted"></i></span>
+                                    <input asp-for="Name" class="form-control bg-light border-0 py-2" style="border-radius: 0 10px 10px 0;" placeholder="e.g. Apple, Samsung..." />
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="Description" class="form-label fw-bold" style="color: #2c3e50;">Description</label>
+                                <textarea asp-for="Description" class="form-control bg-light border-0" rows="4" style="border-radius: 10px;" placeholder="Describe the brand story or details..."></textarea>
+                                <span asp-validation-for="Description" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label for="Logo" class="form-label fw-bold" style="color: #2c3e50;">Brand Logo</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control bg-light border-0" id="Logo" name="logo" style="border-radius: 10px;" />
+                                </div>
+                                <small class="text-muted">Recommended: PNG or SVG with transparent background.</small>
+                            </div>
+
+                            <div class="col-md-6 mb-4 d-flex align-items-center">
+                                <div class="form-check form-switch mt-3">
+                                    <input asp-for="Status" class="form-check-input" type="checkbox" role="switch" id="statusSwitch" style="cursor: pointer; width: 3em; height: 1.5em;" checked />
+                                    <label class="form-check-label ms-2 fw-bold" for="statusSwitch" style="color: #2c3e50; padding-top: 4px;">Brand Status (Active)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-muted opacity-25">
+
+                        <div class="d-flex justify-content-end gap-2">
+                            <a asp-action="Index" class="btn btn-light px-4 fw-bold text-muted border-0" style="border-radius: 10px;">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn text-white px-5 fw-bold shadow-sm" 
+                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 10px;">
+                                <i class="fas fa-save me-1"></i> Save Brand
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,8 +1,101 @@
-@model TModel
+@model Order
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "OrderDetails";
+    Layout = "_CustomerLayout";
 }
 
-<h2>title</h2>
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-primary">Order Details</h2>
+            <p class="text-muted">Order ID: <span class="fw-bold text-dark">#@Model.Id</span></p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary rounded-pill">
+            <i class="bi bi-arrow-left me-1"></i> Back to History
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-bold">Items Purchased</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Product</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-end pe-4">Unit Price</th>
+                                    <th class="text-end pe-4">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderItems)
+                                {
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <h6 class="mb-0 fw-bold">@item.Product.Name</h6>
+                                                    <small class="text-muted">@item.Product.Description</small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">@item.Quantity</td>
+                                        <td class="text-end pe-4">@item.Price.ToString("N2") EGP</td>
+                                        <td class="text-end pe-4 fw-bold">
+                                            @((item.Price * item.Quantity).ToString("N2")) EGP
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 bg-light">
+                <div class="card-body">
+                    <h5 class="fw-bold mb-4">Order Summary</h5>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Order Date</span>
+                        <span class="text-dark fw-medium">@Model.OrderDate.ToString("MMM dd, yyyy")</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Payment Status</span>
+                        <span class="badge bg-success">@Model.PaymentStatus</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <span>Payment Reference</span>
+                        <small class="text-muted">@Model.StripeSessionId.Substring(0, 10)...</small>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <h5 class="fw-bold">Total</h5>
+                        <h4 class="text-success fw-bold">@Model.Total.ToString("N2") EGP</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 p-3 border rounded">
+                <h6>Need Help?</h6>
+                <p class="small text-muted mb-0">If you have any issues with this order, please contact our support team with your Order ID.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+}

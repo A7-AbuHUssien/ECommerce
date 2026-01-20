@@ -1,6 +1,1 @@
-namespace ECommerce;
-
-public class GlobalUsings
-{
-    
-}
+global using ECommerce.Models;

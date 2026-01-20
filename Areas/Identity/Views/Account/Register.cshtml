@@ -1,8 +1,231 @@
-@model dynamic
+@model ECommerce.ViewModels.RegisterVM
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Create an Account";
+    Layout = null;
 }
 
-<h2>title</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+        }
+
+        .split-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* --- Left Pane (Branding) --- */
+        .left-pane {
+            flex-basis: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 50px;
+            /* The cool gradient, but just on one side */
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            text-align: center;
+        }
+
+        .left-pane h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .left-pane p {
+            font-size: 1.25rem;
+            font-weight: 300;
+            max-width: 400px;
+        }
+        
+        /* --- Right Pane (Form) --- */
+        .right-pane {
+            flex-basis: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fff;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 450px; /* Constrain form width for readability */
+            padding: 40px;
+        }
+
+        .form-container h2 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group .icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px 15px 15px 50px; /* Space for icon */
+            background: #f4f7f6; /* Light gray input */
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            color: #333;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder {
+            color: #999;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #764ba2;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
+        }
+
+        .text-danger {
+            font-size: 0.875em;
+            display: block;
+            margin-top: 5px;
+            color: #e74c3c; /* Standard danger red */
+        }
+        
+        .validation-summary-errors {
+             margin-bottom: 15px;
+        }
+
+        .validation-summary-errors ul {
+            padding-left: 20px;
+            color: #e74c3c;
+        }
+
+        .btn-register {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            color: #2c3e50;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 166, 255, 0.4);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #555;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Hide the default label */
+        label {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="split-container">
+        
+        <div class="left-pane">
+            <h1>Join the Club.</h1>
+            <p>Sign up to get access to exclusive deals, faster checkout, and members-only content.</p>
+        </div>
+
+        <div class="right-pane">
+            <div class="form-container">
+                <h2>Create Account</h2>
+
+                <form asp-controller="Account" asp-action="Register" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="input-group">
+                        <span class="icon"><i class="fa-solid fa-user"></i></span>
+                        <input asp-for="Name" class="form-control" placeholder="Full Name" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+                        <input asp-for="Email" class="form-control" placeholder="Email Address" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="icon"><i class="fa-solid fa-at"></i></span>
+                        <input asp-for="UserName" class="form-control" placeholder="Username" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="icon"><i class="fa-solid fa-lock"></i></span>
+                        <input asp-for="Password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <span class="icon"><i class="fa-solid fa-check-double"></i></span>
+                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn-register">Get Started</button>
+                </form>
+
+                <div class="login-link">
+                    <p>Already have an account? <a asp-controller="Account" asp-action="Login">Log In</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+</body>
+</html>

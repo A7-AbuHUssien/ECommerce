@@ -1,31 +1,148 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
+/* Filter Bar Styling */
+.filter-wrapper {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin-top: -40px; /* تداخل بسيط مع الهيرو */
   position: relative;
-  min-height: 100%;
+  z-index: 10;
+  padding: 1.5rem;
 }
 
-body {
-  margin-bottom: 60px;
+.filter-wrapper .form-control, .filter-wrapper .form-select {
+  border: 1px solid #eef2f6;
+  background-color: #f8fafc;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Modern Product Card */
+.product-card {
+  border: none;
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  overflow: hidden;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 30px rgba(0,0,0,0.08);
+}
+
+.product-card .card-img-top {
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.product-card:hover .card-img-top {
+  transform: scale(1.05);
+}
+
+.badge-category {
+  background: rgba(255,255,255,0.9);
+  backdrop-filter: blur(4px);
+  color: var(--dark-bg);
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.price-old {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  text-decoration: line-through;
+}
+
+.price-new {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--primary-color);
+}
+
+/* Pagination */
+.pagination .page-link {
+  border: none;
+  margin: 0 3px;
+  border-radius: 8px;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--primary-color);
+}
+
+
+/* Gallery Styles */
+.thumb-wrapper {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: 0.3s;
+  background: #fff;
+}
+
+.gallery-thumb {
+  opacity: 0.7;
+  transition: 0.3s;
+}
+
+.gallery-thumb:hover, .thumb-active {
+  opacity: 1;
+}
+
+.thumb-active {
+  border-color: var(--primary-color) !important;
+}
+
+/* Color Swatches */
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50% !important;
+  padding: 0;
+  border: 2px solid #fff !important;
+  outline: 1px solid #e2e8f0;
+  transition: 0.2s;
+}
+
+.btn-check:checked + .color-swatch {
+  outline: 2px solid var(--primary-color);
+  transform: scale(1.15);
+}
+
+.letter-spacing-1 { letter-spacing: 1px; }
+
+/* Custom Scrollbar for thumbnails on mobile */
+.custom-scrollbar::-webkit-scrollbar { height: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+
+
+/* تحسين شكل حقول الإدخال في العربة */
+.form-control:focus {
+  box-shadow: none;
+  border-color: var(--primary-color);
+}
+
+/* إزالة أسهم زيادة ونقصان العدد الافتراضية */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* حركة بسيطة عند تمرير الماوس على كروت المنتجات */
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.01);
+}
+
+/* جعل الملخص مثبت عند النزول بالصفحة */
+@media (min-width: 992px) {
+  .sticky-top {
+    z-index: 1;
+  }
 }

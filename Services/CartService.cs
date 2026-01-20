@@ -12,17 +12,23 @@ public class CartService : ICartService
     private readonly IRepository<Cart> _cartRepository;
     private readonly IRepository<Product> _productRepository;
     private readonly IRepository<Promotion> _promotionRepository;
+    private readonly IRepository<Order> _orderRepository;
+    private readonly IRepository<OrderItem> _orderItemRepository;
 
     public CartService(
         UserManager<ApplicationUser> userManager,
         IRepository<Cart> cartRepository,
         IRepository<Product> productRepository,
-        IRepository<Promotion> promotionRepository)
+        IRepository<Promotion> promotionRepository,
+        IRepository<Order> orderRepository,
+        IRepository<OrderItem> orderItemRepository)
     {
         _userManager = userManager;
         _cartRepository = cartRepository;
         _productRepository = productRepository;
         _promotionRepository = promotionRepository;
+        _orderRepository = orderRepository;
+        _orderItemRepository = orderItemRepository;
     }
 
     private async Task<ApplicationUser> GetUserAsync(ClaimsPrincipal user)
@@ -140,8 +146,9 @@ public class CartService : ICartService
             PaymentMethodTypes = new List<string> { "card" },
             LineItems = new List<SessionLineItemOptions>(),
             Mode = "payment",
-            SuccessUrl = $"{request.Scheme}://{request.Host}/identity/checkout/success",
-            CancelUrl = $"{request.Scheme}://{request.Host}/identity/checkout/cancel",
+            SuccessUrl = $"{request.Scheme}://{request.Host}/Customer/Cart/Success?sessionId={{CHECKOUT_SESSION_ID}}",
+            CancelUrl = $"{request.Scheme}://{request.Host}/Customer/Cart/Index",
+            
         };
 
         foreach (var item in cart)
@@ -163,8 +170,61 @@ public class CartService : ICartService
         }
 
         var service = new SessionService();
-        var session = service.Create(options);
+        var session = await service.CreateAsync(options);
 
         return session.Url;
+    }
+
+    public async Task PayedSuccess(string sessionId, string userId)
+    {
+        // 1. تنظيف الـ SessionId من أي علامات زائدة (تجنباً للخطأ السابق)
+        sessionId = sessionId.Trim().Replace(";", "");
+
+        // 2. التأكد من Stripe أن العملية تمت بنجاح فعلاً
+        var service = new SessionService();
+        var session = await service.GetAsync(sessionId);
+
+        if (session.PaymentStatus.ToLower() == "paid")
+        {
+            // 3. التحقق: هل الأوردر ده اتسجل قبل كدا؟ (مهم جداً لمنع التكرار)
+            var existingOrder = await _orderRepository.GetOneAsync(o => o.StripeSessionId == sessionId);
+        
+            if (existingOrder is null) // إذا لم يكن موجوداً، نقوم بإنشائه
+            {
+                // 4. جلب بيانات السلة
+                var cartItems = await _cartRepository.GetAsync(
+                    expression: e => e.ApplicationUserId == userId,
+                    includes: [e => e.Product]);
+
+                if (cartItems.Any())
+                {
+                    // 5. إنشاء الأوردر
+                    var order = new Order {
+                        UserId = userId,
+                        OrderDate = DateTime.UtcNow,
+                        Total = (decimal)session.AmountTotal / 100,
+                        StripeSessionId = sessionId,
+                        PaymentStatus = "Paid",
+                        OrderItems = cartItems.Select(ci => new OrderItem {
+                            ProductId = ci.ProductId,
+                            Quantity = ci.Count,
+                            Price = ci.Price // نستخدم السعر المخزن في السلة
+                        }).ToList()
+                    };
+
+                    await _orderRepository.CreateAsync(order);
+                    
+                    // 6. مسح السلة
+                    foreach(var item in cartItems)
+                    {
+                        _cartRepository.Delete(item);
+                    }
+
+                    // حفظ كل التغييرات
+                    await _orderRepository.CommitAsync();
+                    await _cartRepository.CommitAsync();
+                }
+            }
+        }
     }
 }

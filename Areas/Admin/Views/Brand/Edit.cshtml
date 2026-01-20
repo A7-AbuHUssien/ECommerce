@@ -1,18 +1,108 @@
-@model TModel
+@model Brand
 
 @{
-    Layout = null;
+    ViewData["Title"] = "Edit Brand";
+    Layout = "_AdminLayout";
 }
 
-<!DOCTYPE html>
+<div class="container-fluid px-4 mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/Admin/" class="text-decoration-none" style="color: #764ba2;">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none" style="color: #764ba2;">Brands</a></li>
+            <li class="breadcrumb-item active">Edit Brand</li>
+        </ol>
+    </nav>
 
-<html>
-<head>
-    <title>title</title>
-</head>
-<body>
-<div>
-      
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                <div class="card-header py-3 border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h5 class="mb-0 text-white fw-bold">
+                        <i class="fas fa-edit me-2"></i>Edit Brand: @Model.Name
+                    </h5>
+                </div>
+
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                        <input type="hidden" asp-for="Id"/>
+                        <input type="hidden" asp-for="Logo"/>
+
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="mb-4">
+                                    <label asp-for="Name" class="form-label fw-bold" style="color: #2c3e50;">Brand Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text bg-light border-0 text-muted"><i class="fas fa-tag"></i></span>
+                                        <input asp-for="Name" class="form-control bg-light border-0 py-2" style="border-radius: 0 10px 10px 0;" placeholder="Update brand name..."/>
+                                    </div>
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label asp-for="Description" class="form-label fw-bold" style="color: #2c3e50;">Description</label>
+                                    <textarea asp-for="Description" class="form-control bg-light border-0" rows="5" style="border-radius: 10px;" placeholder="Update brand description..."></textarea>
+                                    <span asp-validation-for="Description" class="text-danger small"></span>
+                                </div>
+
+                                <div class="form-check form-switch mb-4">
+                                    <input asp-for="Status" class="form-check-input" type="checkbox" role="switch" id="statusSwitch" style="width: 2.8em; height: 1.4em; cursor: pointer;"/>
+                                    <label class="form-check-label ms-2 fw-bold" for="statusSwitch" style="color: #2c3e50; padding-top: 3px;">Active Status</label>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="p-4 bg-light rounded-4 border-0 h-100">
+                                    <label class="form-label fw-bold d-block mb-3" style="color: #2c3e50;">Logo Management</label>
+                                    
+                                    <div class="text-center mb-4">
+                                        <p class="small text-muted mb-2 fw-bold text-uppercase">Current Logo</p>
+                                        <div class="bg-white p-3 d-inline-block shadow-sm rounded-3 border">
+                                            @if (!string.IsNullOrWhiteSpace(Model.Logo))
+                                            {
+                                                <img src="~/Uploads/Brand/@Model.Logo"
+                                                     alt="@Model.Name Logo"
+                                                     class="img-fluid"
+                                                     style="max-width: 120px; height: 120px; object-fit: contain;"/>
+                                            }
+                                            else
+                                            {
+                                                <div class="d-flex flex-column align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                                                    <i class="fas fa-image text-muted mb-2" style="font-size: 2rem;"></i>
+                                                    <span class="text-muted small">No Logo</span>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <label for="LogoUpload" class="form-label small fw-bold text-muted">Upload New Logo (Optional)</label>
+                                        <input type="file" id="LogoUpload" class="form-control bg-white border-0 shadow-sm" name="logo" style="border-radius: 8px;"/>
+                                    </div>
+                                    <small class="text-muted" style="font-size: 0.75rem;">Leave empty to keep current logo.</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-5 opacity-25">
+
+                        <div class="d-flex justify-content-end gap-3">
+                            <a asp-action="Index" class="btn btn-light px-4 fw-bold text-muted border-0" style="background: #f1f5f9; border-radius: 10px;">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn text-white px-5 fw-bold shadow-sm" 
+                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 10px;">
+                                <i class="fas fa-save me-1"></i> Update Brand
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

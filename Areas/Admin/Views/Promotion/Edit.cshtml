@@ -1,8 +1,65 @@
-@model TModel
-
+@model Promotion
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Edit Promotion";
+    Layout = "_AdminLayout";
 }
 
-<h2>title</h2>
+<div class="container-fluid px-4 mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                <div class="card-header py-4 border-0 text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <h4 class="mb-0 text-white fw-bold">Update Promotion</h4>
+                    <p class="small text-white opacity-75 mb-0">Editing Code: <span class="fw-bold">@Model.Code</span></p>
+                </div>
+                
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <form asp-action="Edit">
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="mb-4">
+                            <label asp-for="Code" class="form-label fw-bold small text-muted text-uppercase">Promo Code</label>
+                            <input asp-for="Code" class="form-control bg-light border-0 py-2 fw-bold" style="border-radius: 10px; color: #764ba2;" />
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <label asp-for="Discount" class="form-label fw-bold small text-muted text-uppercase">Discount %</label>
+                                <input asp-for="Discount" class="form-control bg-light border-0 py-2" style="border-radius: 10px;" />
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="MaxUsage" class="form-label fw-bold small text-muted text-uppercase">Max Usage</label>
+                                <input asp-for="MaxUsage" class="form-control bg-light border-0 py-2" style="border-radius: 10px;" />
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-muted text-uppercase">Target Product</label>
+                            <select asp-for="ProductId" asp-items="ViewBag.ProductList" class="form-select bg-light border-0 py-2" style="border-radius: 10px;"></select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ValidTo" class="form-label fw-bold small text-muted text-uppercase">Expiry Date</label>
+                            <input asp-for="ValidTo" type="date" class="form-control bg-light border-0 py-2" style="border-radius: 10px;" value="@Model.ValidTo.ToString("yyyy-MM-dd")" />
+                        </div>
+
+                        <div class="p-3 rounded-4 mb-4" style="background: #f8fafc; border: 1px dashed #e2e8f0;">
+                            <div class="form-check form-switch d-flex align-items-center">
+                                <input class="form-check-input ms-0 me-3" type="checkbox" asp-for="IsValid" style="width: 2.5em; height: 1.25em;">
+                                <label class="form-check-label fw-bold" asp-for="IsValid">Promotion Status (Active)</label>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn text-white btn-lg fw-bold shadow-sm" 
+                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px;">
+                                Save Changes
+                            </button>
+                            <a asp-action="Index" class="btn btn-link text-muted text-decoration-none small">Cancel & Go Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

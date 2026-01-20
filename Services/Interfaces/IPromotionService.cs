@@ -1,7 +1,4 @@
-using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace ECommerce.Services.AdminServices.Interfaces;
-
+namespace ECommerce.Services.Interfaces;
 public interface IPromotionService
 {
     Task<IEnumerable<Promotion>> GetAllAsync();

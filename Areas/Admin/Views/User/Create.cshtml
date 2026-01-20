@@ -1,8 +1,113 @@
-@model TModel
-
+@model ApplicationUser
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Create User";
+    Layout = "_AdminLayout";
 }
 
-<h2>title</h2>
+<div class="container-fluid px-4 mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/Admin/" class="text-decoration-none" style="color: #764ba2;">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none" style="color: #764ba2;">Users</a></li>
+            <li class="breadcrumb-item active">New User</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+                <div class="card-header py-4 border-0 text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div class="mb-2">
+                        <i class="fas fa-user-plus text-white opacity-75" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h4 class="mb-0 text-white fw-bold">Add New User</h4>
+                    <p class="small text-white opacity-75 mb-0">Create a new account with specific permissions</p>
+                </div>
+
+                <div class="card-body p-4 p-md-5 bg-white">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-4 small"></div>
+
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label fw-bold small text-muted text-uppercase">Full Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-id-card text-muted"></i></span>
+                                    <input asp-for="Name" class="form-control bg-light border-0 py-2" style="border-radius: 0 10px 10px 0;" placeholder="John Doe" />
+                                </div>
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="UserName" class="form-label fw-bold small text-muted text-uppercase">Username</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-user text-muted"></i></span>
+                                    <input asp-for="UserName" class="form-control bg-light border-0 py-2" style="border-radius: 0 10px 10px 0;" placeholder="johndoe123" />
+                                </div>
+                                <span asp-validation-for="UserName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-bold small text-muted text-uppercase">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-envelope text-muted"></i></span>
+                                    <input asp-for="Email" class="form-control bg-light border-0 py-2" style="border-radius: 0 10px 10px 0;" placeholder="email@example.com" />
+                                </div>
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-muted text-uppercase">Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-lock text-muted"></i></span>
+                                    <input name="password" type="password" class="form-control bg-light border-0 py-2" style="border-radius: 0 10px 10px 0;" placeholder="••••••••" required />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="PhoneNumber" class="form-label fw-bold small text-muted text-uppercase">Phone Number</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-phone text-muted"></i></span>
+                                    <input asp-for="PhoneNumber" class="form-control bg-light border-0 py-2" style="border-radius: 0 10px 10px 0;" placeholder="05xxxxxxxx" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold small text-muted text-uppercase">Assigned Role</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-user-shield text-muted"></i></span>
+                                    <select name="selectedRole" class="form-select bg-light border-0 py-2" style="border-radius: 0 10px 10px 0;">
+                                        @foreach (var role in ViewBag.RoleList)
+                                        {
+                                            <option value="@role">@role</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Address" class="form-label fw-bold small text-muted text-uppercase">Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-0"><i class="fas fa-map-marker-alt text-muted"></i></span>
+                                    <textarea asp-for="Address" class="form-control bg-light border-0 py-2" style="border-radius: 0 10px 10px 0;" rows="2" placeholder="Street, City, Country"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-5 opacity-25">
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <a asp-action="Index" class="btn btn-light px-4 fw-bold text-muted border-0" style="border-radius: 12px; background: #f1f5f9;">
+                                <i class="fas fa-arrow-left me-1"></i> Back to List
+                            </a>
+                            <button type="submit" class="btn text-white px-5 fw-bold shadow-sm" 
+                                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px;">
+                                <i class="fas fa-user-check me-1"></i> Create User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

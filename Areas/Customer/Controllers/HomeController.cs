@@ -1,88 +1,85 @@
 using System.Diagnostics;
-using ECommerce518.DataAccess;
-using ECommerce518.Models;
-using ECommerce518.ViewModels;
+using ECommerce.Services.Interfaces;
+using ECommerce.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-namespace ECommerce518.Controllers
+namespace ECommerce.Areas.Customer.Controllers;
+[Area("Customer")]
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly IProductService _productService;
+    private readonly ICategoryService _categoryService;
+    private readonly IOrderService _orderService;
+    private readonly UserManager<ApplicationUser> _userManager;
+    public HomeController(IProductService productService,
+        ICategoryService categoryService, IOrderService orderService,
+        UserManager<ApplicationUser> userManager)
     {
-        private readonly ILogger<HomeController> _logger;
-        private ApplicationDbContext _context = new();
+        _productService = productService;
+        _categoryService = categoryService;
+        _orderService = orderService;
+        _userManager = userManager;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+    public async Task<IActionResult> Index(AdminProductFilterVM filter, int page = 1, int pageSize = 8)
+    {
+        var productsQuery = _productService.GetQueryable(false);
 
-        public IActionResult Index(FilterVM filterVm, int page = 1)
-        {
-            const decimal discount = 50;
-            var products = _context.Products.AsQueryable();
+        productsQuery = _productService.ApplyFilters(productsQuery, filter);
 
-            // Add Filters
-            products = products.Include(e => e.Category);
+        ViewData["Categories"] = await _categoryService.GetAsync();
 
-            if(filterVm.ProductName is not null)
-            {
-                products = products.Where(e=>e.Name.Contains(filterVm.ProductName));
-                ViewBag.ProductName = filterVm.ProductName;
-            }
+        var (pagedProducts, totalItems) =
+            await _productService.PaginateAsync(productsQuery, page, pageSize);
 
-            if(filterVm.MinPrice > 0)
-            {
-                products = products.Where(e=> (e.Price - e.Price * (e.Discount / 100)) > filterVm.MinPrice);
-                ViewBag.MinPrice = filterVm.MinPrice;
-            }
+        ViewBag.totalPages = Math.Ceiling(totalItems / (double)pageSize);
+        ViewBag.currentPage = page;
 
-            if (filterVm.MaxPrice > 0)
-            {
-                products = products.Where(e => (e.Price - e.Price * (e.Discount / 100)) < filterVm.MaxPrice);
-                ViewBag.MaxPrice = filterVm.MaxPrice;
-            }
+        return View(pagedProducts);
+    }
 
-            if (filterVm.CategoryId > 0)
-            {
-                products = products.Where(e=>e.CategoryId == filterVm.CategoryId);
-                ViewBag.CategoryId = filterVm.CategoryId;
-            }
 
-            if (filterVm.IsHot)
-            {
-                products = products.Where(e => e.Discount > discount);
-                ViewBag.IsHot = filterVm.IsHot;
-            }
+    public IActionResult Privacy()
+    {
+        return View();
+    }
 
-            // List Of categories
-            var categories = _context.Categories.AsQueryable();
-            //ViewBag.Categories = categories.ToList();
-            ViewData["Categories"] = categories.ToList();
+    public ViewResult About()
+    {
+        return View();
+    }
 
-            // Add Pagination
-            var totalPages = Math.Ceiling(products.Count() / 8.0);
-            products = products.Skip((page - 1) * 8).Take(8);
-            ViewBag.totalPages = totalPages;
-            ViewBag.currentPage = page;
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
 
-            return View(products.ToList());
-        }
+    public async Task<IActionResult> Item(int id)
+    {
+        var product = await _productService.GetProductByIdAsync(id);
+        if (product is null) return NotFound();
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        var relatedProduct = await _productService.GetRelatedProducts(id);
+        relatedProduct = relatedProduct.Skip(0).Take(4);
 
-        public ViewResult Welcome()
-        {
-            return View();
-        }
+        ViewBag.relatedProduct = relatedProduct;
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        return View(product);
+    }
+
+    public async Task<IActionResult> ShowCustomerOrders()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        var userOrders= await _orderService.GetUserOrders(user.Id);
+        return View(userOrders);
+    }
+
+    public async Task<IActionResult> ShowCustomerOrderDetails(Guid? orderGuid)
+    {
+        Order? orderDetails = await _orderService.GetOrderDetails(orderGuid);
+        if (orderDetails is null) return NotFound();
+        return View(orderDetails);
     }
 }

@@ -1,8 +1,251 @@
-@model TModel
+@using ECommerce.Models
+@model IEnumerable<Product>
 
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Products Management";
+    Layout = "_AdminLayout";
 }
 
-<h2>title</h2>
+<div class="container-fluid px-4 mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/Admin/" class="text-decoration-none" style="color: #764ba2;">Dashboard</a></li>
+            <li class="breadcrumb-item active">Products</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0" style="color: #2c3e50;">Product Catalog</h2>
+            <p class="text-muted small mb-0">Manage your inventory, pricing, and product visibility.</p>
+        </div>
+        <a asp-action="Create" class="btn text-white px-4 fw-bold shadow-sm" 
+           style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 10px;">
+            <i class="fas fa-plus-circle me-2"></i>Add New Product
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+        <div class="card-body p-4">
+            <form method="get" asp-action="Index" class="row g-3 align-items-end">
+                <div class="col-xl-3 col-md-6">
+                    <label class="form-label fw-bold small text-muted">Product Name</label>
+                    <input type="text" name="ProductName" value="@Context.Request.Query["ProductName"]"
+                           class="form-control bg-light border-0" style="border-radius: 8px;" placeholder="Search name..." />
+                </div>
+
+                <div class="col-xl-2 col-md-6">
+                    <label class="form-label fw-bold small text-muted">Brand</label>
+                    <select name="BrandId" class="form-select bg-light border-0" style="border-radius: 8px;">
+                        <option value="">All Brands</option>
+                        @if (ViewBag.Brands != null)
+                        {
+                            foreach (var brand in ViewBag.Brands)
+                            {
+                                <option value="@brand.Id" selected="@(Context.Request.Query["BrandId"] == brand.Id.ToString())">@brand.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-xl-2 col-md-6">
+                    <label class="form-label fw-bold small text-muted">Category</label>
+                    <select name="CategoryId" class="form-select bg-light border-0" style="border-radius: 8px;">
+                        <option value="">All Categories</option>
+                        @if (ViewBag.Categories != null)
+                        {
+                            foreach (var cat in ViewBag.Categories)
+                            {
+                                <option value="@cat.Id" selected="@(Context.Request.Query["CategoryId"] == cat.Id.ToString())">@cat.Name</option>
+                            }
+                        }
+                    </select>
+                </div>
+
+                <div class="col-xl-2 col-md-6">
+                    <label class="form-label fw-bold small text-muted">Max Price ($)</label>
+                    <input type="number" name="MaxPrice" step="0.01" value="@Context.Request.Query["MaxPrice"]"
+                           class="form-control bg-light border-0" style="border-radius: 8px;" placeholder="0.00" />
+                </div>
+
+                <div class="col-xl-2 col-md-6">
+                    <label class="form-label fw-bold small text-muted">Stock Alert < @(Context.Request.Query["QuantityUnder"].ToString() ?? "...")</label>
+                    <input type="number" name="QuantityUnder" value="@Context.Request.Query["QuantityUnder"]"
+                           class="form-control bg-light border-0" style="border-radius: 8px;" placeholder="Qty < X" />
+                </div>
+
+                <div class="col-xl-1 col-md-12 d-grid">
+                    <button type="submit" class="btn text-white fw-bold shadow-sm" style="background: #764ba2; border-radius: 8px; height: 38px;">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4 py-3 text-muted small fw-bold">PRODUCT</th>
+                            <th class="text-center text-muted small fw-bold">CATEGORY/BRAND</th>
+                            <th class="text-center text-muted small fw-bold">PRICE</th>
+                            <th class="text-center text-muted small fw-bold">STOCK</th>
+                            <th class="text-center text-muted small fw-bold">STATUS</th>
+                            <th class="text-center text-muted small fw-bold pe-4">ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var p in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 py-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3 shadow-sm border rounded-3 bg-white p-1" style="width: 50px; height: 50px;">
+                                            <img src="~/Uploads/product/@p.MainImg" alt="img" style="width: 100%; height: 100%; object-fit: contain;" />
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold text-dark mb-0">@p.Name</div>
+                                            <div class="text-muted" style="font-size: 0.75rem;">SKU: @p.SKU</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="d-block fw-bold small">@p.Category?.Name</span>
+                                    <span class="text-muted small">@p.Brand?.Name</span>
+                                </td>
+                                <td class="text-center fw-bold text-dark">
+                                    $@p.Price.ToString("N2")
+                                </td>
+                                <td class="text-center">
+                                    @if (p.Quantity > 20)
+                                    {
+                                        <span class="badge px-3 py-2 fw-bold" style="background: #dcfce7; color: #16a34a; border-radius: 8px;">@p.Quantity In Stock</span>
+                                    }
+                                    else if (p.Quantity > 0)
+                                    {
+                                        <span class="badge px-3 py-2 fw-bold" style="background: #fef9c3; color: #ca8a04; border-radius: 8px;">Low: @p.Quantity</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge px-3 py-2 fw-bold" style="background: #fee2e2; color: #ef4444; border-radius: 8px;">Out of Stock</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge rounded-pill @(p.Status ? "bg-success" : "bg-secondary")" style="font-size: 0.7rem;">
+                                        @(p.Status ? "Active" : "Inactive")
+                                    </span>
+                                </td>
+                                <td class="text-center pe-4">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Details" asp-route-id="@p.Id" class="btn btn-sm btn-light border-0" style="background: #f1f5f9; color: #64748b; border-radius: 8px;"><i class="fas fa-eye"></i></a>
+                                        <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-light border-0" style="background: #eeebff; color: #764ba2; border-radius: 8px;"><i class="fas fa-edit"></i></a>
+                                        <button class="btn btn-sm btn-light border-0 delete-btn" data-id="@p.Id" style="background: #fee2e2; color: #ef4444; border-radius: 8px;"><i class="fas fa-trash-alt"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 px-2">
+        <form method="get" class="d-flex align-items-center mb-3 mb-md-0">
+            <span class="small text-muted me-2">Show</span>
+            <select name="pageSize" class="form-select form-select-sm border-0 bg-white shadow-sm w-auto" onchange="this.form.submit()" style="border-radius: 8px;">
+                @{
+                    int currentSize = ViewBag.PageSize ?? 10;
+                    foreach (var size in new[] { 5, 10, 20, 50 }) {
+                        <option value="@size" selected="@(size == currentSize)">@size</option>
+                    }
+                }
+            </select>
+            <span class="small text-muted ms-2">entries</span>
+        </form>
+
+        <p class="text-muted small mb-0 fw-medium">
+            Showing <span class="text-dark">@(((ViewBag.Page - 1) * ViewBag.PageSize) + 1)</span> to 
+            <span class="text-dark">@(Math.Min(ViewBag.Page * ViewBag.PageSize, ViewBag.TotalItems))</span> of 
+            <span class="text-dark">@ViewBag.TotalItems</span> items
+        </p>
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        @{
+            int totalPages = (int)Math.Ceiling((double)ViewBag.TotalItems / ViewBag.PageSize);
+            int currentPage = ViewBag.Page;
+            int pageSize = ViewBag.PageSize;
+        }
+        <nav>
+            <ul class="pagination pagination-sm gap-1">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link border-0 shadow-sm rounded-2" asp-action="Index" asp-route-page="@(currentPage - 1)" asp-route-pageSize="@pageSize" asp-route-ProductName="@Context.Request.Query["ProductName"]" asp-route-MaxPrice="@Context.Request.Query["MaxPrice"]" asp-route-BrandId="@Context.Request.Query["BrandId"]" asp-route-CategoryId="@Context.Request.Query["CategoryId"]" asp-route-QuantityUnder="@Context.Request.Query["QuantityUnder"]">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+
+                @for (int i = 1; i <= totalPages; i++)
+                {
+                    <li class="page-item">
+                        <a class="page-link border-0 shadow-sm rounded-2 @(i == currentPage ? "active-page" : "")" asp-action="Index" asp-route-page="@i" asp-route-pageSize="@pageSize" asp-route-ProductName="@Context.Request.Query["ProductName"]" asp-route-MaxPrice="@Context.Request.Query["MaxPrice"]" asp-route-BrandId="@Context.Request.Query["BrandId"]" asp-route-CategoryId="@Context.Request.Query["CategoryId"]" asp-route-QuantityUnder="@Context.Request.Query["QuantityUnder"]">
+                            @i
+                        </a>
+                    </li>
+                }
+
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link border-0 shadow-sm rounded-2" asp-action="Index" asp-route-page="@(currentPage + 1)" asp-route-pageSize="@pageSize" asp-route-ProductName="@Context.Request.Query["ProductName"]" asp-route-MaxPrice="@Context.Request.Query["MaxPrice"]" asp-route-BrandId="@Context.Request.Query["BrandId"]" asp-route-CategoryId="@Context.Request.Query["CategoryId"]" asp-route-QuantityUnder="@Context.Request.Query["QuantityUnder"]">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<style>
+    .active-page {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        color: white !important;
+    }
+    .page-link { color: #764ba2; padding: 8px 14px; transition: 0.3s; }
+    .page-link:hover { background: #eeebff; }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const productId = this.getAttribute('data-id');
+                Swal.fire({
+                    title: 'Delete Product?',
+                    text: "This item will be permanently removed from inventory.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#764ba2',
+                    cancelButtonColor: '#94a3b8',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(`/Admin/Product/Delete/${productId}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' }
+                        })
+                        .then(response => {
+                            if (response.ok) {
+                                Swal.fire({ title: 'Deleted!', icon: 'success', confirmButtonColor: '#764ba2' })
+                                .then(() => location.reload());
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    });
+</script>

@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace ECommerce.Repositories.Interfaces;
 
-public interface IProductSubImage : IRepository<IProductSubImage>
+public interface IProductSubImageRepository : IRepository<ProductSubImage>
 {
-    void RemoveRange(IEnumerable<ProductSubImageRepository> products);
+    Task<bool> RemoveRange(IEnumerable<ProductSubImage> subImages);
 }

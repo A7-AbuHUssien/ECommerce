@@ -1,6 +1,6 @@
 namespace ECommerce.Repositories.Interfaces;
 
-public class IOrderRepository
+public interface IOrderRepository : IRepository<Order>
 {
-    
+    Task<Order?> GetOrderDetails(Guid? orderGuid);
 }

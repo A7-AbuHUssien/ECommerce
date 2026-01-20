@@ -1,8 +1,6 @@
 using ECommerce.Repositories.Interfaces;
-using ECommerce.Services.AdminServices.Interfaces;
-using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace ECommerce.Services.AdminServices;
+using ECommerce.Services.Interfaces;
+namespace ECommerce.Services;
 
 public class PromotionService : IPromotionService
 {

@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Services.Interfaces;
 
@@ -10,4 +11,5 @@ public interface ICartService
     Task DecrementAsync(ClaimsPrincipal user, int productId);
     Task RemoveAsync(ClaimsPrincipal user, int productId);
     Task<string> CreateStripeSessionAsync(ClaimsPrincipal user, HttpRequest request);
+    Task PayedSuccess(string sessionId, string userId);
 }

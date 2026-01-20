@@ -1,8 +1,194 @@
-@model Product
-
+@model ECommerce.ViewModels.ProductVM
 @{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
+    ViewData["Title"] = "Edit Product";
+    Layout = "_AdminLayout";
 }
 
-<h2>title</h2>
+<div class="container-fluid px-4 mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/Admin/" class="text-decoration-none" style="color: #764ba2;">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none" style="color: #764ba2;">Products</a></li>
+            <li class="breadcrumb-item active">Edit Product</li>
+        </ol>
+    </nav>
+
+    <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+        <div class="card-header py-3 border-0" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <h5 class="mb-0 text-white fw-bold">
+                <i class="fas fa-edit me-2"></i>Edit Product: @Model.Product?.Name
+            </h5>
+        </div>
+
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Product.Id"/>
+            @* نحتفظ باسم الصورة القديمة لو مغيرهاش *@
+            <input type="hidden" asp-for="Product.MainImg"/>
+
+            <div class="card-body p-4 p-md-5 bg-white">
+                <div class="row">
+                    <div class="col-xl-4 border-end">
+                        <div class="pe-xl-3">
+                            <h6 class="fw-bold mb-4 text-muted text-uppercase small">Main Product Image</h6>
+                            <div class="text-center mb-4">
+                                <div class="position-relative d-inline-block p-2 shadow-sm border rounded-4 bg-white">
+                                    <img src="~/Uploads/product/@Model.Product?.MainImg"
+                                         alt="@Model.Product?.Name"
+                                         class="img-fluid rounded-3"
+                                         style="max-height: 280px; object-fit: contain;">
+                                </div>
+                                <div class="mt-3">
+                                    <label class="btn btn-light btn-sm fw-bold border" style="border-radius: 8px;">
+                                        <i class="fas fa-camera me-1"></i> Change Main Image
+                                        <input type="file" name="file" class="d-none"/>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <hr class="my-4 opacity-25">
+
+                            <h6 class="fw-bold mb-3 text-muted text-uppercase small">Gallery Images (Sub)</h6>
+                            <div class="row g-2 mb-3">
+                                @if (Model.ProductSubImages is not null && Model.ProductSubImages.Any())
+                                {
+                                    foreach (var item in Model.ProductSubImages)
+                                    {
+                                        <div class="col-6">
+                                            <div class="position-relative border rounded-3 p-1">
+                                                <img src="~/Uploads/product/ProductSubImg/@item.Img"
+                                                     class="img-fluid rounded-2"
+                                                     style="height: 100px; width: 100%; object-fit: cover;">
+                                                <input type="file" name="subfiles" class="form-control form-control-sm mt-1 border-0 bg-light" style="font-size: 10px;"/>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <div class="bg-light p-3 rounded-3 border-dashed">
+                                <label class="small fw-bold d-block mb-2">Add More Images</label>
+                                <input type="file" name="subfiles" multiple class="form-control form-control-sm border-0"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-8">
+                        <div class="ps-xl-3">
+                            <div class="row">
+                                <div class="col-md-8 mb-4">
+                                    <label asp-for="Product.Name" class="form-label fw-bold small text-muted">Product Name</label>
+                                    <input asp-for="Product.Name" class="form-control bg-light border-0 py-2" style="border-radius: 10px;" />
+                                    <span asp-validation-for="Product.Name" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-4 mb-4">
+                                    <label asp-for="Product.SKU" class="form-label fw-bold small text-muted">SKU Code</label>
+                                    <input asp-for="Product.SKU" class="form-control bg-light border-0 py-2" style="border-radius: 10px;" />
+                                    <span asp-validation-for="Product.SKU" class="text-danger small"></span>
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    <label asp-for="Product.Description" class="form-label fw-bold small text-muted">Description</label>
+                                    <textarea asp-for="Product.Description" class="form-control bg-light border-0" rows="4" style="border-radius: 10px;"></textarea>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-bold small text-muted">Category</label>
+                                    <select asp-for="Product.CategoryId"
+                                            asp-items="@(new SelectList(Model.Categories, "Id", "Name", Model.Product.CategoryId))"
+                                            class="form-select bg-light border-0 py-2" style="border-radius: 10px;">
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-bold small text-muted">Brand</label>
+                                    <select asp-for="Product.BrandId"
+                                            asp-items="@(new SelectList(Model.Brands, "Id", "Name", Model.Product.BrandId))"
+                                            class="form-select bg-light border-0 py-2" style="border-radius: 10px;">
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <label asp-for="Product.Price" class="form-label fw-bold small text-muted">Price ($)</label>
+                                    <input asp-for="Product.Price" class="form-control bg-light border-0 py-2" style="border-radius: 10px;" />
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <label asp-for="Product.Discount" class="form-label fw-bold small text-muted">Discount %</label>
+                                    <input asp-for="Product.Discount" class="form-control bg-light border-0 py-2" style="border-radius: 10px;" />
+                                </div>
+
+                                <div class="col-md-4 mb-4">
+                                    <label asp-for="Product.Quantity" class="form-label fw-bold small text-muted">Stock Quantity</label>
+                                    <input asp-for="Product.Quantity" class="form-control bg-light border-0 py-2" style="border-radius: 10px;" />
+                                </div>
+
+                                <div class="col-12 mb-4">
+                                    <label class="form-label fw-bold small text-muted d-block mb-3">Available Colors</label>
+                                    <div id="color-picker-container" class="d-flex flex-wrap gap-2">
+                                        @if (Model.Product.Colors != null && Model.Product.Colors.Any())
+                                        {
+                                            foreach (var color in Model.Product.Colors)
+                                            {
+                                                <div class="d-flex align-items-center bg-light p-2 rounded-3 border">
+                                                    <input type="color" name="colors" class="form-control form-control-color border-0 bg-transparent" value="@color.Color" style="width: 40px; height: 35px;"/>
+                                                    <button type="button" class="btn btn-link text-danger p-0 ms-2" onclick="this.parentElement.remove()">
+                                                        <i class="fas fa-times-circle"></i>
+                                                    </button>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                    <button type="button" class="btn btn-sm mt-3 px-3 fw-bold" style="background: #eeebff; color: #764ba2; border-radius: 8px;" onclick="addColorPicker()">
+                                        <i class="fas fa-plus me-1"></i> Add Another Color
+                                    </button>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-check form-switch p-0 mt-2">
+                                        <div class="bg-light p-3 rounded-3 d-flex align-items-center justify-content-between">
+                                            <label class="fw-bold small text-muted mb-0">Product Status (Active)</label>
+                                            <input asp-for="Product.Status" class="form-check-input ms-0" type="checkbox" style="width: 2.5em; height: 1.25em; cursor: pointer; float: none;" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer bg-white border-top p-4 d-flex justify-content-end gap-3">
+                <a asp-action="Index" class="btn btn-light px-4 fw-bold text-muted border-0" style="border-radius: 12px; background: #f1f5f9;">
+                    <i class="fas fa-arrow-left me-1"></i> Back to List
+                </a>
+                <button type="submit" class="btn text-white px-5 fw-bold shadow-sm" 
+                        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; border-radius: 12px;">
+                    <i class="fas fa-save me-1"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function addColorPicker() {
+        const container = document.getElementById("color-picker-container");
+        const div = document.createElement("div");
+        div.className = "d-flex align-items-center bg-light p-2 rounded-3 border animate__animated animate__fadeIn";
+        div.innerHTML = `
+            <input type="color" name="colors" class="form-control form-control-color border-0 bg-transparent" value="#000000" style="width: 40px; height: 35px;"/>
+            <button type="button" class="btn btn-link text-danger p-0 ms-2" onclick="this.parentElement.remove()">
+                <i class="fas fa-times-circle"></i>
+            </button>
+        `;
+        container.appendChild(div);
+    }
+</script>
+
+<style>
+    .border-dashed { border: 2px dashed #e2e8f0 !important; }
+    .form-control:focus, .form-select:focus {
+        background-color: #fff !important;
+        border: 1px solid #764ba2 !important;
+        box-shadow: 0 0 0 4px rgba(118, 75, 162, 0.1) !important;
+    }
+</style>
