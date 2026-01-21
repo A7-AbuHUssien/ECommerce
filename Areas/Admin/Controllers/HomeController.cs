@@ -7,7 +7,6 @@ namespace ECommerce.Areas.Admin.Controllers;
 [Authorize(Roles = $"{StaticData.SUPER_ADMIN_ROLE},{StaticData.ADMIN_ROLE},{StaticData.EMPLOYEE_ROLE}")]
 public class HomeController : Controller
 {
-    // GET
     public IActionResult Index()
     {
         return View();

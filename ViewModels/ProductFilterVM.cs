@@ -1,6 +1,6 @@
 namespace ECommerce.ViewModels;
 
-public class AdminProductFilterVM
+public class ProductFilterVM
 {
     public string ProductName { get; set; }
     public decimal MaxPrice { get; set; }

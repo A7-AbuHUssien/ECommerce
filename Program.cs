@@ -68,7 +68,7 @@ public class Program
         // Configure the HTTP request pipeline.
         if (!app.Environment.IsDevelopment())
         {
-            // ✅ Fixed route (should not be /HomeController/Error)
+            // Fixed route (should not be /HomeController/Error)
             app.UseExceptionHandler("/Home/Error");
             app.UseHsts();
         }
@@ -79,12 +79,12 @@ public class Program
         app.UseAuthorization();
 
 
-        // ✅ Route for Areas first
+        // Route for Areas first
         app.MapControllerRoute(
             name: "areas",
             pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
-        // ✅ Default route for non-area controllers
+        // Default route for non-area controllers
         app.MapControllerRoute(
             name: "default",
             pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");

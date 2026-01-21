@@ -18,7 +18,6 @@ public class OrderController : Controller
 
     public async Task<IActionResult> Index()
     {
-        // جلب جميع الطلبات من قاعدة البيانات
         var orders = await _orderService.GetAllOrdersAsync();
         return View(orders);
     }
@@ -32,19 +31,14 @@ public class OrderController : Controller
     public async Task<IActionResult> Details(Guid guid) 
     {
         if (guid == Guid.Empty) return NotFound();
-
-        // جلب الطلب مع بيانات المستخدم والمنتجات
         var order = await _orderService.GetOrderDetails(guid);
-    
         if (order == null)
         {
             return NotFound();
         }
-
-        // تمرير بيانات المستخدم عبر ViewBag لسهولة الوصول إليها في الـ View
         ViewBag.CustomerName = order.User?.UserName;
         ViewBag.CustomerEmail = order.User?.Email;
-        ViewBag.CustomerPhone = order.User?.PhoneNumber; // إذا كنت تجمعه عند التسجيل
+        ViewBag.CustomerPhone = order.User?.PhoneNumber;
         ViewBag.OrderDateFormatted = order.OrderDate.ToString("MMMM dd, yyyy");
 
         return View(order);

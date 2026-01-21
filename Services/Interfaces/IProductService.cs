@@ -16,7 +16,7 @@ public interface IProductService
 
     Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
 
-    IQueryable<Product> ApplyFilters(IQueryable<Product> products, AdminProductFilterVM? filter);
+    IQueryable<Product> ApplyFilters(IQueryable<Product> products, ProductFilterVM? filter);
     IQueryable<Product> GetQueryable(bool tracked = true);
 
     Task<(IEnumerable<Product> Products, int TotalItems)>

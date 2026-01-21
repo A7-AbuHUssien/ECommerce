@@ -9,14 +9,12 @@ namespace ECommerce.Areas.Admin.Controllers;
 [Authorize(Roles = $"{StaticData.SUPER_ADMIN_ROLE},{StaticData.ADMIN_ROLE},{StaticData.EMPLOYEE_ROLE}")]
 public class CategoryController : Controller
 {
-    //private readonly IRepository<Category> _repository;
     private readonly ICategoryService _categoryService;
     public CategoryController(ICategoryService categoryService)
     {
         _categoryService = categoryService;
     }
 
-    // GET
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         return View(await _categoryService.GetAsync(tracked:false, cancellationToken: cancellationToken));
@@ -70,8 +68,6 @@ public class CategoryController : Controller
             return Json(new { success = true });
         return Json(new { success = false });
     }
-
-    
 
     [HttpGet]
     public async Task<IActionResult> Details(int id,CancellationToken cancellationToken)

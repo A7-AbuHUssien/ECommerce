@@ -22,7 +22,7 @@ public class HomeController : Controller
         _userManager = userManager;
     }
 
-    public async Task<IActionResult> Index(AdminProductFilterVM filter, int page = 1, int pageSize = 8)
+    public async Task<IActionResult> Index(ProductFilterVM filter, int page = 1, int pageSize = 8)
     {
         var productsQuery = _productService.GetQueryable(false);
 

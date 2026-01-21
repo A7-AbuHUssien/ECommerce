@@ -30,7 +30,6 @@
             min-height: 100vh;
         }
 
-        /* --- الجزء الأيسر (العلامة التجارية) --- */
         .left-pane {
             flex-basis: 50%;
             display: flex;
@@ -38,7 +37,7 @@
             justify-content: center;
             align-items: center;
             padding: 50px;
-            /* نفس التدرج اللوني الرائع */
+
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: #fff;
             text-align: center;
@@ -56,7 +55,6 @@
             max-width: 400px;
         }
 
-        /* --- الجزء الأيمن (النموذج) --- */
         .right-pane {
             flex-basis: 50%;
             display: flex;
@@ -67,7 +65,7 @@
 
         .form-container {
             width: 100%;
-            max-width: 450px; /* تحديد عرض النموذج */
+            max-width: 450px; 
             padding: 40px;
         }
 
@@ -93,8 +91,8 @@
 
         .form-control {
             width: 100%;
-            padding: 15px 15px 15px 50px; /* مساحة للأيقونة */
-            background: #f4f7f6; /* خلفية رمادية فاتحة */
+            padding: 15px 15px 15px 50px; 
+            background: #f4f7f6; 
             border: 1px solid #ddd;
             border-radius: 10px;
             color: #333;
@@ -117,7 +115,7 @@
             font-size: 0.875em;
             display: block;
             margin-top: 5px;
-            color: #e74c3c; /* لون أحمر للخطر */
+            color: #e74c3c; 
         }
 
         .validation-summary-errors {
@@ -129,15 +127,14 @@
             color: #e74c3c;
         }
 
-        /* تصميم زر تسجيل الدخول */
         .btn-login {
             width: 100%;
             padding: 15px;
             border: none;
             border-radius: 10px;
-            /* تدرج لوني مختلف قليلاً لتمييزه عن زر التسجيل */
+
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff; /* لون الخط أبيض */
+            color: #fff; 
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
@@ -150,7 +147,6 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
 
-        /* رابط إنشاء حساب جديد */
         .register-link {
             text-align: center;
             margin-top: 20px;
@@ -167,12 +163,10 @@
             text-decoration: underline;
         }
 
-        /* إخفاء الـ label الافتراضي */
         label {
             display: none;
         }
 
-        /* لإضافة مساحة لخانة "تذكرني" إذا أردت إضافتها */
         .options-group {
             display: flex;
             justify-content: space-between;
@@ -188,11 +182,10 @@
 
         .options-group .form-check-input {
             margin-right: 8px;
-            /* يمكنك تصميم الـ checkbox هنا بشكل أفضل إذا أردت */
         }
 
         .options-group label {
-            display: inline-block; /* إظهار الـ label الخاص بـ "تذكرني" */
+            display: inline-block;
             margin: 0;
             font-weight: 400;
             color: #555;

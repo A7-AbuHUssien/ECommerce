@@ -24,9 +24,8 @@ public class ProductController : Controller
         _brandService = brandService;
     }
 
-    // GET: Admin/Product
     [HttpGet]
-    public async Task<IActionResult> Index(AdminProductFilterVM? filter, int page = 1, int pageSize = 10)
+    public async Task<IActionResult> Index(ProductFilterVM? filter, int page = 1, int pageSize = 10)
     {
         var products = _productService.GetQueryable(false);
         products = _productService.ApplyFilters(products, filter);
@@ -41,7 +40,6 @@ public class ProductController : Controller
         return View(pagedProducts);
     }
 
-    // GET: Admin/Product/Details/5
     [HttpGet]
     public async Task<IActionResult> Details(int id, CancellationToken cancellationToken)
     {
@@ -52,7 +50,6 @@ public class ProductController : Controller
         return View(product);
     }
 
-    // GET: Admin/Product/Create
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -65,7 +62,6 @@ public class ProductController : Controller
         return View(vm);
     }
 
-    // POST: Admin/Product/Create
     [HttpPost]
     public async Task<IActionResult> Create(ProductVM productVm, IFormFile? file, List<IFormFile>? subfiles, string[]? colors)
     {
@@ -86,7 +82,6 @@ public class ProductController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // GET: Admin/Product/Edit/5
     [HttpGet]
     public async Task<IActionResult> Edit(int id)
     {
@@ -104,7 +99,6 @@ public class ProductController : Controller
         return View(vm);
     }
 
-    // POST: Admin/Product/Edit/5
     [HttpPost]
     public async Task<IActionResult> Edit(ProductVM productVm, IFormFile? file, List<IFormFile>? subfiles, string[]? colors)
     {
@@ -125,7 +119,6 @@ public class ProductController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // POST: Admin/Product/Delete/5
     [HttpPost]
     public async Task<IActionResult> Delete(int id)
     {

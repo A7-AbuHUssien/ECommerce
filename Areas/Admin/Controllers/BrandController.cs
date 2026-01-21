@@ -15,22 +15,19 @@ public class BrandController : Controller
     {
         _brandService = brandService;
     }
-
-    // GET: Admin/Brand
+    [HttpGet]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         await _brandService.GetAsync(cancellationToken: cancellationToken);
         return View(await _brandService.GetAsync(tracked:false, cancellationToken: cancellationToken));
     }
 
-    // GET: Admin/Brand/Create
     [HttpGet]
     public IActionResult Create()
     {
         return View();
     }
 
-    // POST: Admin/Brand/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Brand brand, IFormFile? logo, CancellationToken cancellationToken)
@@ -44,7 +41,6 @@ public class BrandController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // GET: Admin/Brand/Edit/5
     [HttpGet]
     public async Task<IActionResult> Edit(int id,CancellationToken cancellationToken)
     {
@@ -55,7 +51,6 @@ public class BrandController : Controller
         return View(brand);
     }
 
-    // POST: Admin/Brand/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Brand brand, IFormFile? logo, CancellationToken cancellationToken)
@@ -67,7 +62,6 @@ public class BrandController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // POST: Admin/Brand/Delete/5
     [HttpPost]
     public async Task<IActionResult> Delete(int id,CancellationToken cancellationToken)
     {
@@ -78,7 +72,6 @@ public class BrandController : Controller
         return Json(new { success = true });
     }
 
-    // GET: Admin/Brand/Details/5
     [HttpGet]
     public async Task<IActionResult> Details(int id,CancellationToken cancellationToken)
     {

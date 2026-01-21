@@ -108,7 +108,7 @@ public class ProductService : IProductService
             if (File.Exists(subPath)) File.Delete(subPath);
             _subImageRepository.Delete(sub);
         }
-
+        
         var colors = await _colorRepository.GetAsync(c => c.ProductId == id);
         _colorRepository.RemoveRange(colors);
 
@@ -123,7 +123,7 @@ public class ProductService : IProductService
         return true;
     }
     
-    public IQueryable<Product> ApplyFilters(IQueryable<Product> products, AdminProductFilterVM? filter)
+    public IQueryable<Product> ApplyFilters(IQueryable<Product> products, ProductFilterVM? filter)
     {
         if (filter == null)
             return products;
