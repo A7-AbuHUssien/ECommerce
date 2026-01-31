@@ -71,17 +71,6 @@ This is a **classic ASP.NET Core MVC application**, not an over-engineered syste
 
 ---
 
-## 📊 By The Numbers (Approximate)
-
-- **15+ Controllers**
-- **20+ Models**
-- **10+ Services**
-- **10+ Repositories**
-- **40+ Razor Views**
-- **25+ EF Core Migrations**
-
----
-
 ## ▶️ How to Run
 
 1. Open `ECommerce.sln` in Visual Studio
